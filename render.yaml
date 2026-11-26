@@ -2,6 +2,7 @@ services:
   - type: keyvalue
     name: medcore-hms-redis
     plan: free
+    region: oregon
     ipAllowList: []
     persistenceMode: off
     maxmemoryPolicy: noeviction
@@ -10,6 +11,7 @@ services:
     name: medcore-hms-api
     runtime: docker
     plan: free
+    region: oregon
     dockerfilePath: ./Dockerfile.api
     dockerContext: .
     autoDeployTrigger: off
@@ -64,6 +66,7 @@ services:
     name: medcore-hms-web
     runtime: docker
     plan: free
+    region: oregon
     dockerfilePath: ./Dockerfile.web
     dockerContext: .
     autoDeployTrigger: off
@@ -77,4 +80,4 @@ databases:
     databaseName: medcore
     user: medcore
     plan: free
-    region: singapore
+    region: oregon

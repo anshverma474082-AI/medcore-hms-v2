@@ -229,7 +229,7 @@ story += [
     p("MedCore HMS brings together hospital onboarding, role-based access, appointments, encrypted clinical records and attachments, patient profiles, electronically signed prescriptions, laboratory review, pharmacy inventory, multi-line billing, search, role-aware dashboards, and notifications. The implementation follows the project brief's NestJS, Prisma, and Next.js stack, with PostgreSQL for persistent data and Redis for session and queue support.", "BodyMed"),
 ]
 handoff = Table([[
-    p("REVIEW STATUS  |  Local application and database workflows were checked. The Render configuration is prepared, but no hosted service or public demo URL has been created. The latest working changes have not been pushed to GitHub.", "CalloutMed")
+    p("REVIEW STATUS  |  The public Render frontend is live at medcore-hms-web.onrender.com, but it is only a sign-in shell. Render could not create the API database because this account already has an active free PostgreSQL database, so the API was canceled. Source and report are published on the GitHub main branch.", "CalloutMed")
 ]], colWidths=[166 * mm])
 handoff.setStyle(TableStyle([
     ("BACKGROUND", (0, 0), (-1, -1), MINT),
@@ -303,7 +303,7 @@ story += [
         ["Security behavior", "Refresh-token rotation and replay rejection were checked earlier. Unit tests now cover encrypted profile/file storage and integrity sign-off helpers."],
         ["Browser review", "A desktop browser smoke check confirmed seeded sign-in, dashboard, 28 appointments across three pages, page navigation, search for appointment ID 42, and billing screen rendering."],
         ["Automated browser test", "Not passed: the Playwright web server started, but headless Chromium exited with a macOS Mach port permission error before the sign-in test ran."],
-        ["Docker / Render", "Docker could not be run because Docker is unavailable in the environment. Render config is prepared but not deployed."],
+        ["Docker / Render", "Docker could not be run because it is unavailable in the environment. The Render frontend and Valkey service were created; PostgreSQL was rejected because the account already has an active free database, and API creation was canceled. The public frontend page loads, but hosted sign-in and data workflows are not available."],
     ], [46 * mm, 120 * mm]),
     p("The 100 automated backend unit tests measure 82.37% API line coverage. They do not replace full provider-backed, Docker, or end-to-end verification. Workspace lists use server-side search and paging; dashboard summaries and global quick search use compatibility endpoints capped at 100 rows per resource. The local review is not a penetration test, clinical safety validation, load test, or production operations review.", "SmallMed"),
     PageBreak(),
@@ -383,11 +383,11 @@ story += [
     p("Items still required for a public review release", "SubsectionMed"),
     make_table([
         ["Item", "Current state / action"],
-        ["Render demo URL", "No service is deployed. Create the services, set secrets, deploy, and verify the hosted flows before sharing a URL."],
+        ["Render demo URL", "Frontend preview: https://medcore-hms-web.onrender.com. The database/API are blocked by the account's active free PostgreSQL limit. Free the existing free database slot or configure an approved paid/external database, sync the blueprint, and verify health and sign-in before presenting this as a working demo."],
         ["Provider-backed email, SMS, and payment", "Integration adapters are present. Provider credentials and external verification are still required; live transactions are not claimed."],
         ["Docker validation", "Docker was unavailable here. Build and start the Compose stack on a Docker-enabled machine."],
         ["Walkthrough recording", "A presenter must record the requested project walkthrough."],
-        ["GitHub update", "The source repository link is listed below. Current working changes remain local and have not been committed or pushed."],
+        ["GitHub update", "The current source and report are published on the main branch of the repository linked below."],
         ["Search and pagination", "Server-side search and paging are implemented for all workspace lists. Dashboard summaries and global quick search still use role-scoped compatibility arrays capped at 100 rows per resource."],
         ["Submission evidence", "This report is six pages. The ER relationship source is included in the repository; export it as a standalone image if required. Attach coverage evidence and record the requested walkthrough."],
     ], [45 * mm, 121 * mm]),
@@ -401,7 +401,7 @@ story += [
     p("Project repository", "SubsectionMed"),
     p(f'<link href="{repo_url}" color="#087E8B">{repo_url}</link>', "BodyMed"),
     p("Conclusion", "SubsectionMed"),
-    p("MedCore HMS now has the requested TypeScript architecture and a locally verified demonstration of core hospital-management workflows. Type checks, lint, production build, 100 API tests, 82.37% API line coverage, PostgreSQL/Redis API health, seeded browser sign-in, appointment search/paging, database-backed attachment and invoice checks, and billing view rendering passed. A public URL, live provider integrations, Docker validation, automated browser execution, and presenter-recorded video remain deployment and submission tasks.", "BodyMed"),
+    p("MedCore HMS implements the requested TypeScript architecture and locally verified core hospital-management workflows. Type checks, lint, production build, 100 API tests, 82.37% API line coverage, PostgreSQL/Redis API health, seeded browser sign-in, appointment search/paging, database-backed attachment and invoice checks, and billing view rendering passed. The Render frontend preview is public, but PostgreSQL creation was blocked by the account's active free database limit and the API was canceled. Docker validation, automated browser execution, live provider checks, a working hosted API, and presenter-recorded video remain incomplete.", "BodyMed"),
 ]
 
 doc.build(story)

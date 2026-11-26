@@ -2,7 +2,7 @@
 
 ## Current status
 
-The working tree is a NestJS, Prisma, PostgreSQL, Redis, and Next.js application. It includes role-based hospital workflows, patient profiles, encrypted clinical notes and attachments, electronic sign-off metadata, lab and pharmacy operations, billing, and notifications. Changes are local and have not been committed or pushed.
+The project is a NestJS, Prisma, PostgreSQL, Redis, and Next.js application. It includes role-based hospital workflows, patient profiles, encrypted clinical notes and attachments, electronic sign-off metadata, lab and pharmacy operations, billing, and notifications. The current source is published on GitHub `main`. The Render frontend shell is public; the API and database are not deployed.
 
 ## Completed locally
 
@@ -22,9 +22,9 @@ Dashboard summaries and global quick search still use compatibility list endpoin
 |---|---|---|
 | Browser automation | Playwright starts its local server, but headless Chromium exits with a macOS Mach port permission error before the test runs. | Run `pnpm test:e2e` in CI or on a compatible machine. The prior manual desktop browser smoke check passed for sign-in, appointments, paging/search, and billing. |
 | Docker validation | Docker is unavailable in this environment. | Build and start the Compose stack on a machine with Docker; verify health checks and persistence. |
-| Render demo | `render.yaml` and container files are present, but no services or public URL have been provisioned. | Set up the authorized Render services, production secrets, and public health check. |
+| Render demo | Frontend is deployed at https://medcore-hms-web.onrender.com and its sign-in page loads. Valkey is available. PostgreSQL creation was rejected because the account already has an active free database; API creation was canceled. | Free the existing free PostgreSQL slot or configure an approved paid/external database. Then sync the blueprint and verify API health, sign-in, and core hosted workflows. Do not delete the existing database without backing it up. |
 | Provider checks | Resend, Twilio, and Razorpay adapters exist; no provider credentials or live transaction tests were supplied. | Add sandbox credentials and verify only the required provider workflows. |
-| GitHub publication | Repository: https://github.com/anshverma474082-AI/medcore-hms-v2. Changes remain local and uncommitted. | Review the diff and approve the commit/push before publication. |
+| GitHub publication | Repository: https://github.com/anshverma474082-AI/medcore-hms-v2. Current source and report are published on `main`. | Publish any further changes after reviewing them. |
 | Walkthrough evidence | No presenter-recorded walkthrough has been supplied. | Record the reviewer walkthrough from the local or hosted demo. |
 | ER diagram export | The Mermaid ER source is available at `docs/er-diagram.mmd`; no standalone image export is included. | Export an SVG or PNG if the submission portal requires it. |
 
@@ -37,4 +37,4 @@ Dashboard summaries and global quick search still use compatibility list endpoin
 
 ## Release dependencies
 
-A public review URL requires a configured hosting account and production secrets. Provider-backed checks require sandbox credentials. GitHub publication requires approval for the proposed commit and push. The presenter must record the walkthrough. These items are not described as complete in the project report.
+A working public review requires a PostgreSQL service, secure production secrets, and a successful API deployment; only the frontend shell currently loads. Provider-backed checks require sandbox credentials. The presenter must record the walkthrough. These items are not described as complete in the project report.

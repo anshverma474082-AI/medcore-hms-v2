@@ -4,9 +4,11 @@ MedCore HMS is a multi-hospital management system with a NestJS API, Prisma data
 
 **Repository:** https://github.com/anshverma474082-AI/medcore-hms-v2
 
-**Current state:** local project prepared for review; working changes are not committed or pushed.
+**Current state:** the source and release materials are published on the `main` branch. The Render frontend is live, but its API and database are not available yet.
 
-**Demo:** no public URL has been provisioned.
+**Frontend URL:** https://medcore-hms-web.onrender.com
+
+**Deployment note:** the sign-in page loads, but sign-in and data-backed workflows are unavailable until the API and PostgreSQL database are deployed. Render rejected the database creation because this account already has an active free PostgreSQL database.
 
 ## Features
 
@@ -53,7 +55,7 @@ The seed creates two demo hospitals, eight doctors, thirty patients, and demo wo
 
 ## Deployment and release
 
-render.yaml is deployment configuration only. No Render services have been provisioned and there is no live review URL. A hosted deployment requires a PostgreSQL database, a Redis-compatible service, secure environment variables, and connected frontend/API host names. Razorpay, Resend, and Twilio remain disabled until credentials are supplied. Working changes have not been pushed; review the source and approve any Git commit or push separately.
+The public frontend is deployed at https://medcore-hms-web.onrender.com. The Render Key Value service is available, but the blueprint could not create `medcore-hms-db` because the account already has an active free PostgreSQL database; Render consequently canceled API creation. The public page is only a frontend shell, not a working end-to-end demo. To finish deployment, free the account's existing free database slot or configure an approved paid/external PostgreSQL service, then sync the blueprint and verify API health and sign-in. Do not remove the existing database without confirming its data is backed up. Razorpay, Resend, and Twilio remain unconfigured because no provider credentials were supplied. The latest published source is on `main` in the repository linked above.
 
 ## Project materials
 
