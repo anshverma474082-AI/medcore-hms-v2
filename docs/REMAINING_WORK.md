@@ -2,7 +2,7 @@
 
 ## Current status
 
-The project is a NestJS, Prisma, PostgreSQL, Redis, and Next.js application. It includes role-based hospital workflows, patient profiles, encrypted clinical notes and attachments, electronic sign-off metadata, lab and pharmacy operations, billing, and notifications. The current source is published on GitHub `main`. The Render frontend shell is public; the API and database are not deployed.
+The project is a NestJS, Prisma, PostgreSQL, Redis, and Next.js application. It includes role-based hospital workflows, patient profiles, encrypted clinical notes and attachments, electronic sign-off metadata, lab and pharmacy operations, billing, and notifications. The current source is published on GitHub `main`. The Render frontend is public; a separate free Neon database has been created, but the API is not deployed yet.
 
 ## Completed locally
 
@@ -22,7 +22,7 @@ Dashboard summaries and global quick search still use compatibility list endpoin
 |---|---|---|
 | Browser automation | Playwright starts its local server, but headless Chromium exits with a macOS Mach port permission error before the test runs. | Run `pnpm test:e2e` in CI or on a compatible machine. The prior manual desktop browser smoke check passed for sign-in, appointments, paging/search, and billing. |
 | Docker validation | Docker is unavailable in this environment. | Build and start the Compose stack on a machine with Docker; verify health checks and persistence. |
-| Render demo | Frontend is deployed at https://medcore-hms-web.onrender.com and its sign-in page loads. Valkey is available. PostgreSQL creation was rejected because the account already has an active free database; API creation was canceled. | Free the existing free PostgreSQL slot or configure an approved paid/external database. Then sync the blueprint and verify API health, sign-in, and core hosted workflows. Do not delete the existing database without backing it up. |
+| Render demo | Frontend is deployed at https://medcore-hms-web.onrender.com and its sign-in page loads. Valkey is available. A separate free Neon PostgreSQL project was created in Oregon. | Add the Neon connection URL as the Render `DATABASE_URL` secret, sync the blueprint, then verify API health, sign-in, and core hosted workflows. The existing AI DJ Render database is untouched. |
 | Provider checks | Resend, Twilio, and Razorpay adapters exist; no provider credentials or live transaction tests were supplied. | Add sandbox credentials and verify only the required provider workflows. |
 | GitHub publication | Repository: https://github.com/anshverma474082-AI/medcore-hms-v2. Current source and report are published on `main`. | Publish any further changes after reviewing them. |
 | Walkthrough evidence | No presenter-recorded walkthrough has been supplied. | Record the reviewer walkthrough from the local or hosted demo. |
@@ -37,4 +37,4 @@ Dashboard summaries and global quick search still use compatibility list endpoin
 
 ## Release dependencies
 
-A working public review requires a PostgreSQL service, secure production secrets, and a successful API deployment; only the frontend shell currently loads. Provider-backed checks require sandbox credentials. The presenter must record the walkthrough. These items are not described as complete in the project report.
+A working public review requires the Neon connection URL to be configured securely in Render and the API to deploy successfully; only the frontend currently loads. Provider-backed checks require sandbox credentials. The presenter must record the walkthrough. These items are not described as complete in the project report.
