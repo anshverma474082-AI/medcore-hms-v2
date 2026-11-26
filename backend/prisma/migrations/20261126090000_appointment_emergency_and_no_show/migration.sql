@@ -1,0 +1,4 @@
+ALTER TYPE "AppointmentStatus" ADD VALUE IF NOT EXISTS 'NO_SHOW';
+
+ALTER TABLE "Appointment"
+ADD COLUMN "emergency" BOOLEAN NOT NULL DEFAULT false;

@@ -1,0 +1,17 @@
+packages:
+  - backend
+  - frontend
+allowBuilds:
+  '@prisma/engines': true
+  '@scarf/scarf': false
+  bcrypt: true
+  esbuild: true
+  msgpackr-extract: false
+  prisma: true
+minimumReleaseAgeExclude:
+  - '@nestjs/common@12.6.1'
+  - '@nestjs/core@12.6.1'
+  - '@nestjs/platform-express@12.6.1'
+  - '@nestjs/platform-socket.io@12.6.1'
+  - '@nestjs/testing@12.6.1'
+  - '@nestjs/websockets@12.6.1'

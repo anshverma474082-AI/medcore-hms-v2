@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102a43">
+  <meta name="description" content="MedCore Hospital Management System">
+  <title>MedCore HMS</title>
+  <link rel="stylesheet" href="/assets/app.css">
+  <script defer src="/assets/app.js"></script>
+</head>
+<body>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <section id="authView" class="auth-shell"></section>
+  <div id="appView" class="app-shell" hidden>
+    <aside class="sidebar">
+      <a class="brand" href="#dashboard" aria-label="MedCore home">
+        <span class="brand-mark">M</span>
+        <span><strong>MedCore</strong><small>Hospital care, connected</small></span>
+      </a>
+      <nav id="mainNav" class="main-nav" aria-label="Main menu"></nav>
+      <div class="sidebar-footer">
+        <span class="status-dot"></span>
+        <span>Secure clinic workspace</span>
+      </div>
+    </aside>
+    <main class="main-area">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">MEDCORE HMS</p>
+          <h1 id="pageTitle">Overview</h1>
+        </div>
+        <div class="account-area">
+          <div class="account-copy"><strong id="accountName"></strong><span id="accountRole"></span></div>
+          <span class="avatar" id="accountAvatar">M</span>
+          <button class="button button-quiet" id="logoutButton" type="button">Sign out</button>
+        </div>
+      </header>
+      <section id="pageContent" class="page-content" aria-live="polite"></section>
+      <footer class="page-footer">MedCore HMS <span>•</span> Local academic demo</footer>
+    </main>
+  </div>
+</body>
+</html>

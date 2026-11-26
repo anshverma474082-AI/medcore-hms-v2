@@ -1,0 +1,18 @@
+flowchart LR
+    Browser[Next.js 15 web app]
+    Proxy[Same-origin /api rewrite]
+    API[NestJS REST API]
+    Guards[JWT sessions, roles, CSRF, rate limits]
+    Prisma[Prisma ORM]
+    DB[(PostgreSQL)]
+    Redis[(Redis)]
+    Queue[BullMQ notification jobs]
+    Socket[Socket.IO notifications]
+    Providers[Razorpay / Resend / Twilio adapters]
+
+    Browser --> Proxy --> API
+    API --> Guards --> Prisma --> DB
+    API --> Redis
+    API --> Queue --> Redis
+    API --> Socket
+    API --> Providers

@@ -1,18 +1,60 @@
 services:
   postgres:
     image: postgres:16-alpine
-    environment: { POSTGRES_DB: medcore, POSTGRES_USER: medcore, POSTGRES_PASSWORD: medcore }
-    ports: ["5432:5432"]
+    environment:
+      POSTGRES_DB: medcore
+      POSTGRES_USER: medcore
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-medcore-local-only}
     volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U medcore -d medcore"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
   redis:
     image: redis:7-alpine
-    ports: ["6379:6379"]
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD:-medcore-local-only}"]
+    volumes: [redisdata:/data]
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-medcore-local-only}", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
   api:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.api
     env_file: .env
     environment:
-      DATABASE_URL: postgresql+psycopg2://medcore:medcore@postgres:5432/medcore
-    depends_on: [postgres, redis]
-    ports: ["8000:8000"]
+      DATABASE_URL: postgresql://medcore:${POSTGRES_PASSWORD:-medcore-local-only}@postgres:5432/medcore?schema=public
+      REDIS_URL: redis://:${REDIS_PASSWORD:-medcore-local-only}@redis:6379
+      COOKIE_SECURE: "false"
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    ports: ["3001:3001"]
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3001/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+      args:
+        API_INTERNAL_URL: http://api:3001
+    environment:
+      API_INTERNAL_URL: http://api:3001
+      NEXT_PUBLIC_API_URL: http://localhost:3001
+    depends_on: [api]
+    ports: ["3000:3000"]
+  nginx:
+    image: nginx:1.27-alpine
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on: [web, api]
+    ports: ["8080:80"]
 volumes:
   pgdata:
+  redisdata:
