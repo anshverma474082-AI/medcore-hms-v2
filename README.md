@@ -4,11 +4,12 @@ MedCore HMS is a multi-hospital management system with a NestJS API, Prisma data
 
 **Repository:** https://github.com/anshverma474082-AI/medcore-hms-v2
 
-**Current state:** the source and release materials are published on `main`. The Render frontend is live. The Render API has not passed its health check; recent API startup attempts failed to connect to the Neon PostgreSQL endpoint (Prisma `P1001`).
+**Current state:** the source and release materials are published on `main`. Both Render services are live, Neon migrations and demo seeding completed, and the hosted admin sign-in, appointment list, and billing list were verified on 28 November 2026.
 
 **Frontend URL:** https://medcore-hms-web.onrender.com
+**API health URL:** https://medcore-hms-api-sfzz.onrender.com/health
 
-**Deployment note:** the public sign-in page loads, but sign-in and data-backed workflows remain unavailable until the Render API can reach Neon and pass `/health`. The existing AI DJ Render database has not been changed.
+**Deployment note:** the public demo is available. The API connects to Neon through its pooled endpoint; `/health` and the frontend `/api/health` proxy return healthy responses. The seeded admin can sign in and view appointment and billing data. Other role workflows and external provider integrations still need review. The existing AI DJ Render database has not been changed.
 
 ## Features
 
@@ -55,7 +56,7 @@ The seed creates two demo hospitals, eight doctors, thirty patients, and demo wo
 
 ## Deployment and release
 
-The public frontend is deployed at https://medcore-hms-web.onrender.com. The Render Key Value service is available. A separate free Neon PostgreSQL project named `medcore-hms-demo` has been created in Oregon and its URL was configured in Render. The API has not passed its health check: earlier startup logs showed Prisma `P1001`, and the latest public `/health` check still did not return health JSON. GitHub Actions run [46126430967](https://github.com/anshverma474082-AI/medcore-hms-v2/actions/runs/46126430967) passed lint, type-check, all 100 API tests, production build, the Playwright sign-in-page smoke test, and basic Docker Compose health checks. The browser test does not cover authenticated workflows, and the Docker smoke test does not test persistence. The latest source sets both web services to deploy on commits and aligns the seeded demo password with the sign-in page; sign in to Render and inspect its latest startup logs to finish the hosted API setup. The existing AI DJ Render database has not been changed. Do not enter real patient information. Razorpay, Resend, and Twilio remain unconfigured because no provider credentials were supplied. The latest published source is on `main` in the repository linked above.
+The public frontend is deployed at https://medcore-hms-web.onrender.com and the API at https://medcore-hms-api-sfzz.onrender.com. The Render Key Value service and a separate free Neon PostgreSQL project named `medcore-hms-demo` are configured. The API uses Neon’s pooled endpoint; Prisma migrations and demo seeding completed. Both the API `/health` route and frontend `/api/health` proxy returned success. A hosted sign-in with the seeded admin reached the dashboard; the appointment list showed 14 matching visits and billing showed the seeded invoice. GitHub Actions run [46127315636](https://github.com/anshverma474082-AI/medcore-hms-v2/actions/runs/46127315636) passed lint, type-check, all 100 API tests, production build, the Playwright sign-in-page smoke test, and Docker Compose health checks. CI browser checks do not cover authenticated workflows, and Docker persistence was not tested. The Render deployment uses a public API URL for the Next.js same-origin proxy because the short private hostname did not resolve from the web service. The existing AI DJ Render database has not been changed. Do not enter real patient information. Razorpay, Resend, and Twilio remain unconfigured because no provider credentials were supplied; a presenter walkthrough remains to be recorded. The latest published source is on `main` in the repository linked above.
 
 ## Project materials
 

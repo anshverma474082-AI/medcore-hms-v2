@@ -71,4 +71,4 @@ services:
     healthCheckPath: /
     envVars:
       - key: API_INTERNAL_URL
-        value: http://medcore-hms-api:10000
+        value: https://medcore-hms-api-sfzz.onrender.com

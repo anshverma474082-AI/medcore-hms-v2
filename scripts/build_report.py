@@ -229,7 +229,7 @@ story += [
     p("MedCore HMS brings together hospital onboarding, role-based access, appointments, encrypted clinical records and attachments, patient profiles, electronically signed prescriptions, laboratory review, pharmacy inventory, multi-line billing, search, role-aware dashboards, and notifications. The implementation follows the project brief's NestJS, Prisma, and Next.js stack, with PostgreSQL for persistent data and Redis for session and queue support.", "BodyMed"),
 ]
 handoff = Table([[
-    p("REVIEW STATUS  |  The Render frontend is live at medcore-hms-web.onrender.com. The Neon DATABASE_URL is configured, but the API has not passed /health; earlier startup logs showed Prisma P1001, and the current public check still does not return health JSON. The existing AI DJ database is untouched. GitHub Actions passed the project CI checks on the published source.", "CalloutMed")
+    p("REVIEW STATUS  |  The Render frontend and API are live. Neon migrations and demo seeding completed. Both API /health and the website /api/health proxy return success; the seeded admin sign-in, appointment list, and billing list were verified on 28 November 2026. The existing AI DJ database is untouched. Other roles, external providers, and the presenter walkthrough remain to be checked.", "CalloutMed")
 ]], colWidths=[166 * mm])
 handoff.setStyle(TableStyle([
     ("BACKGROUND", (0, 0), (-1, -1), MINT),
@@ -301,11 +301,11 @@ story += [
         ["Local services and API", "No local API or database health check passed in this session: PostgreSQL at 127.0.0.1:55432 was not running, so seeded sign-in could not be checked."],
         ["Database-backed flow checks", "Not verified in this session because the local PostgreSQL service was unavailable. No payment was initiated."],
         ["Security behavior", "Refresh-token rotation and replay rejection were checked earlier. Unit tests now cover encrypted profile/file storage and integrity sign-off helpers."],
-        ["Browser review", "Safari confirmed the public Render sign-in page and demo-account guidance render. Authenticated workflows could not be tested because the hosted API did not return a health response."],
+        ["Browser review", "The hosted demo signed in with the seeded admin account and displayed the dashboard. The appointment workspace showed 14 matching visits, and billing displayed the seeded invoice."],
         ["Automated browser test", "GitHub Actions passed the Playwright sign-in-page smoke test. It checks visible sign-in content only; authenticated workflows are not covered. The earlier local Chromium run was blocked by a macOS Mach port error."],
-        ["Docker / Render", "GitHub Actions built and started Docker Compose and passed web-root and API /health checks; persistence was not tested. The Render frontend returns HTTP 200. Neon is configured, but the current API health check still does not return health JSON; earlier startup logs showed Prisma P1001 and Safari displayed Render’s loading page."],
+        ["Docker / Render", "GitHub Actions built and started Docker Compose and passed web-root and API /health checks; persistence was not tested. On Render, Neon migrations and seeding completed. The API /health route and the website /api/health proxy returned success; admin sign-in, appointments, and billing were checked."],
     ], [46 * mm, 120 * mm]),
-    p("The 100 automated backend unit tests measure 82.37% API line coverage. GitHub Actions run 46126430967 passed lint, type-check, API tests, production build, the Playwright sign-in-page smoke test, and Docker Compose service health checks. These checks do not replace provider-backed or authenticated hosted end-to-end verification. Workspace lists use server-side search and paging; dashboard summaries and global quick search use compatibility endpoints capped at 100 rows per resource. The local review is not a penetration test, clinical safety validation, load test, or production operations review.", "SmallMed"),
+    p("The 100 automated backend unit tests measure 82.37% API line coverage. GitHub Actions run 46127315636 passed lint, type-check, API tests, production build, the Playwright sign-in-page smoke test, and Docker Compose service health checks. These checks do not replace provider-backed or authenticated hosted end-to-end verification. Workspace lists use server-side search and paging; dashboard summaries and global quick search use compatibility endpoints capped at 100 rows per resource. The local review is not a penetration test, clinical safety validation, load test, or production operations review.", "SmallMed"),
     PageBreak(),
 ]
 
@@ -383,11 +383,11 @@ story += [
     p("Items still required for a public review release", "SubsectionMed"),
     make_table([
         ["Item", "Current state / action"],
-        ["Render demo URL", "Frontend preview: https://medcore-hms-web.onrender.com. Neon is configured, but the API has not passed /health; earlier startup logs reported Prisma P1001, and the current public request does not return health JSON. Sign in to Render, inspect current logs, sync the latest blueprint, resolve database connectivity, and verify hosted workflows before calling this a working demo."],
+        ["Render demo URL", "Working review demo: https://medcore-hms-web.onrender.com. API health: https://medcore-hms-api-sfzz.onrender.com/health. Neon migrations and seeding completed; API and same-origin proxy health checks passed, and the seeded admin dashboard, appointments, and billing rendered. Verify doctor/patient flows if required."],
         ["Provider-backed email, SMS, and payment", "Integration adapters are present. Provider credentials and external verification are still required; live transactions are not claimed."],
-        ["Authenticated browser checks", "The passing Playwright smoke test checks the sign-in page only. Verify authenticated role workflows after the hosted API is healthy."],
+        ["Authenticated browser checks", "The Playwright smoke test checks the sign-in page only. The hosted admin path was verified; doctor and patient workflows still need review."],
         ["Walkthrough recording", "A presenter must record the requested project walkthrough."],
-        ["GitHub update", "The latest source and report updates are published on the main branch of the repository linked below."],
+        ["GitHub update", "The source and report updates are published on the main branch of the repository linked below."],
         ["Search and pagination", "Server-side search and paging are implemented for all workspace lists. Dashboard summaries and global quick search still use role-scoped compatibility arrays capped at 100 rows per resource."],
         ["Submission evidence", "This report is six pages. The ER relationship source is included in the repository; export it as a standalone image if required. Attach coverage evidence and record the requested walkthrough."],
     ], [45 * mm, 121 * mm]),
@@ -401,7 +401,7 @@ story += [
     p("Project repository", "SubsectionMed"),
     p(f'<link href="{repo_url}" color="#087E8B">{repo_url}</link>', "BodyMed"),
     p("Conclusion", "SubsectionMed"),
-    p("MedCore HMS implements the requested NestJS, Prisma, and Next.js architecture. GitHub Actions confirms lint, type checks, production builds, 100 backend unit tests, 82.37% API line coverage, a Playwright sign-in-page smoke test, and Docker Compose service health. The Render frontend is live, but the API health route remains unresponsive, so the hosted site is not yet a working end-to-end demo. Authenticated hosted workflows, provider-backed checks, and a presenter-recorded walkthrough remain incomplete.", "BodyMed"),
+    p("MedCore HMS implements the requested NestJS, Prisma, and Next.js architecture. GitHub Actions confirms lint, type checks, production builds, 100 backend unit tests, 82.37% API line coverage, a Playwright sign-in-page smoke test, and Docker Compose service health. The Render frontend and API are live; Neon migrations and seeding completed, both API health routes passed, and the seeded admin can view appointment and billing data. Doctor/patient workflows, provider-backed checks, data recovery tests, credential rotation, and the presenter-recorded walkthrough remain incomplete.", "BodyMed"),
 ]
 
 doc.build(story)
