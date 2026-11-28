@@ -2,15 +2,16 @@
 
 ## Current status
 
-The project is a NestJS, Prisma, PostgreSQL, Redis, and Next.js application. It includes role-based hospital workflows, patient profiles, encrypted clinical notes and attachments, electronic sign-off metadata, lab and pharmacy operations, billing, and notifications. The current source is published on GitHub `main`. The Render frontend is public; a separate free Neon database has been created, but the API is not deployed yet.
+The project is a NestJS, Prisma, PostgreSQL, Redis, and Next.js application. It includes role-based hospital workflows, patient profiles, encrypted clinical notes and attachments, electronic sign-off metadata, lab and pharmacy operations, billing, and notifications. The current source is published on GitHub `main`. The Render frontend is public and the API service and separate free Neon database are configured, but the API has not returned a healthy `/health` response.
 
-## Completed locally
+## Completed and verified
 
 - Added validated, tenant-scoped server-side search and paging for appointments, medical records, prescriptions, lab orders, invoices, medicines, and notifications. The corresponding workspace lists use those paged APIs. Prescription dispensing can filter for the unfilled queue.
 - Preserved existing role and ownership filters; search avoids encrypted clinical fields.
 - Added unit coverage for page bounds, query validation, role scoping, search filters, status filters, and result envelopes.
 - The backend suite passes **100 tests across 21 suites** with **82.37% measured line coverage**, above the 70% target.
 - API and web type checks, lint, and production builds pass.
+- GitHub Actions run [46126430967](https://github.com/anshverma474082-AI/medcore-hms-v2/actions/runs/46126430967) passed lint, type-check, all 100 API tests, the production build, a Playwright sign-in-page smoke test, and a Docker Compose build/startup smoke test with web and API health checks. The browser test does not sign in or exercise authenticated workflows; Docker persistence was not tested.
 - Local PostgreSQL/Redis health, seeded admin sign-in, appointment search/paging, billing rendering, encrypted attachment authorization/decryption, and temporary invoice creation/readback were verified in the previous local review. Temporary test rows were removed; no payment was initiated.
 - The Render blueprint, Docker configuration, report source, and ER diagram source are present.
 
@@ -20,11 +21,10 @@ Dashboard summaries and global quick search still use compatibility list endpoin
 
 | Work | Current state | Required next step |
 |---|---|---|
-| Browser automation | Playwright starts its local server, but headless Chromium exits with a macOS Mach port permission error before the test runs. Safari confirmed the sign-in UI only; backend requests fail because the API/database are unavailable locally. | Run `pnpm test:e2e` in CI or on a compatible machine, then verify authenticated workflows against a running database. |
-| Docker validation | Docker is unavailable in this environment. | Build and start the Compose stack on a machine with Docker; verify health checks and persistence. |
-| Render demo | Frontend is deployed at https://medcore-hms-web.onrender.com and its sign-in page loads. Valkey is available. The Neon connection URL is configured, but prior API deploy logs report Prisma `P1001`; the public API health route still shows Render's application-loading page. | Sign in to Render, inspect the latest API deployment logs and database settings, sync the latest blueprint, resolve Neon connectivity, and verify API health, sign-in, and core hosted workflows. The existing AI DJ Render database is untouched. |
+| Browser automation | GitHub Actions passed the Playwright sign-in-page smoke test. The test checks visible sign-in content only; it does not sign in or exercise authenticated workflows. The earlier local Chromium run was blocked by a macOS Mach port error. | After the hosted API is healthy, verify the main authenticated role workflows. |
+| Docker validation | GitHub Actions built and started the Compose stack and passed web-root and API `/health` checks. Database persistence and recovery were not tested. | Run persistence/recovery checks if they are required for the submission. |
+| Render demo | The frontend returns HTTP 200 and its sign-in page loads. Valkey and Neon are configured. The API `/health` route still does not return health JSON: Safari showed Render's application-loading page and a direct request timed out; earlier startup logs reported Prisma `P1001`. | Sign in to Render with GitHub, inspect the latest API deployment logs and database settings, sync the latest blueprint, resolve Neon connectivity, and verify API health, sign-in, and core hosted workflows. The existing AI DJ Render database is untouched. |
 | Provider checks | Resend, Twilio, and Razorpay adapters exist; no provider credentials or live transaction tests were supplied. | Add sandbox credentials and verify only the required provider workflows. |
-| GitHub publication | Repository: https://github.com/anshverma474082-AI/medcore-hms-v2. The latest source and report updates are published on `main`. | No source publication remains for this update. |
 | Walkthrough evidence | No presenter-recorded walkthrough has been supplied. | Record the reviewer walkthrough from the local or hosted demo. |
 | ER diagram export | The Mermaid ER source is available at `docs/er-diagram.mmd`; no standalone image export is included. | Export an SVG or PNG if the submission portal requires it. |
 
@@ -37,4 +37,4 @@ Dashboard summaries and global quick search still use compatibility list endpoin
 
 ## Release dependencies
 
-A working public review still requires the Render API to connect to Neon and pass `/health`; only the frontend currently loads. Provider-backed checks require sandbox credentials. The presenter must record the walkthrough. These items are not described as complete in the project report.
+A working public review still requires the Render API to connect to Neon and pass `/health`; the frontend currently loads, but the API is not responsive. CI verifies the sign-in page and basic Docker Compose startup, not authenticated hosted workflows or data persistence. Provider-backed checks require sandbox credentials. The presenter must record the walkthrough. These items are not described as complete in the project report.

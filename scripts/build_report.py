@@ -229,7 +229,7 @@ story += [
     p("MedCore HMS brings together hospital onboarding, role-based access, appointments, encrypted clinical records and attachments, patient profiles, electronically signed prescriptions, laboratory review, pharmacy inventory, multi-line billing, search, role-aware dashboards, and notifications. The implementation follows the project brief's NestJS, Prisma, and Next.js stack, with PostgreSQL for persistent data and Redis for session and queue support.", "BodyMed"),
 ]
 handoff = Table([[
-    p("REVIEW STATUS  |  The Render frontend is live at medcore-hms-web.onrender.com. The Neon DATABASE_URL is configured, but the API has not passed /health; earlier startup logs showed Prisma P1001, and the public API health route still shows Render's application-loading page. The existing AI DJ database is untouched. Latest source and report updates are published on GitHub main.", "CalloutMed")
+    p("REVIEW STATUS  |  The Render frontend is live at medcore-hms-web.onrender.com. The Neon DATABASE_URL is configured, but the API has not passed /health; earlier startup logs showed Prisma P1001, and the current public check still does not return health JSON. The existing AI DJ database is untouched. GitHub Actions passed the project CI checks on the published source.", "CalloutMed")
 ]], colWidths=[166 * mm])
 handoff.setStyle(TableStyle([
     ("BACKGROUND", (0, 0), (-1, -1), MINT),
@@ -302,10 +302,10 @@ story += [
         ["Database-backed flow checks", "Not verified in this session because the local PostgreSQL service was unavailable. No payment was initiated."],
         ["Security behavior", "Refresh-token rotation and replay rejection were checked earlier. Unit tests now cover encrypted profile/file storage and integrity sign-off helpers."],
         ["Browser review", "Safari confirmed the public Render sign-in page and demo-account guidance render. Authenticated workflows could not be tested because the hosted API did not return a health response."],
-        ["Automated browser test", "Not passed: the Playwright web server started, but headless Chromium exited with a macOS Mach port permission error before the sign-in test ran."],
-        ["Docker / Render", "Docker is unavailable in this environment. The Render frontend and Valkey service are available. Neon is configured in Render, but previous API startup logs showed Prisma P1001 and the public health route still shows an application-loading page. The latest blueprint sync and a successful API deploy remain unverified."],
+        ["Automated browser test", "GitHub Actions passed the Playwright sign-in-page smoke test. It checks visible sign-in content only; authenticated workflows are not covered. The earlier local Chromium run was blocked by a macOS Mach port error."],
+        ["Docker / Render", "GitHub Actions built and started Docker Compose and passed web-root and API /health checks; persistence was not tested. The Render frontend returns HTTP 200. Neon is configured, but the current API health check still does not return health JSON; earlier startup logs showed Prisma P1001 and Safari displayed Render’s loading page."],
     ], [46 * mm, 120 * mm]),
-    p("The 100 automated backend unit tests measure 82.37% API line coverage. They do not replace full provider-backed, Docker, or end-to-end verification. Workspace lists use server-side search and paging; dashboard summaries and global quick search use compatibility endpoints capped at 100 rows per resource. The local review is not a penetration test, clinical safety validation, load test, or production operations review.", "SmallMed"),
+    p("The 100 automated backend unit tests measure 82.37% API line coverage. GitHub Actions run 46126430967 passed lint, type-check, API tests, production build, the Playwright sign-in-page smoke test, and Docker Compose service health checks. These checks do not replace provider-backed or authenticated hosted end-to-end verification. Workspace lists use server-side search and paging; dashboard summaries and global quick search use compatibility endpoints capped at 100 rows per resource. The local review is not a penetration test, clinical safety validation, load test, or production operations review.", "SmallMed"),
     PageBreak(),
 ]
 
@@ -378,14 +378,14 @@ story += [
         "The starter project used FastAPI, while the project brief specified NestJS, Prisma, and Next.js. The current implementation uses the specified stack; the earlier source is retained in legacy/fastapi for reference.",
         "Hospital boundaries must apply consistently across related records. The API carries the caller's hospital scope into protected queries and access checks.",
         "Appointment overlap, refresh-token replay, clinical-text privacy, and concurrent pharmacy stock updates required explicit validation and transaction logic.",
-        "The API unit tests cover the core rules and authorization behavior. In this session the local PostgreSQL endpoint refused connections, so migrations and database-backed attachment, invoice, and sign-in flows could not be rechecked. Docker was unavailable, so container configuration also needs validation on a Docker-enabled machine.",
+        "The API unit tests cover the core rules and authorization behavior. In this session the local PostgreSQL endpoint refused connections, so migrations and database-backed attachment, invoice, and sign-in flows could not be rechecked. The Docker Compose build and service health checks passed in GitHub Actions; persistence was not tested.",
     ]),
     p("Items still required for a public review release", "SubsectionMed"),
     make_table([
         ["Item", "Current state / action"],
-        ["Render demo URL", "Frontend preview: https://medcore-hms-web.onrender.com. Neon is configured, but the API has not passed /health and prior startup logs reported Prisma P1001. Sign in to Render, inspect current logs, sync the latest blueprint, resolve database connectivity, and verify sign-in before calling this a working demo."],
+        ["Render demo URL", "Frontend preview: https://medcore-hms-web.onrender.com. Neon is configured, but the API has not passed /health; earlier startup logs reported Prisma P1001, and the current public request does not return health JSON. Sign in to Render, inspect current logs, sync the latest blueprint, resolve database connectivity, and verify hosted workflows before calling this a working demo."],
         ["Provider-backed email, SMS, and payment", "Integration adapters are present. Provider credentials and external verification are still required; live transactions are not claimed."],
-        ["Docker validation", "Docker was unavailable here. Build and start the Compose stack on a Docker-enabled machine."],
+        ["Authenticated browser checks", "The passing Playwright smoke test checks the sign-in page only. Verify authenticated role workflows after the hosted API is healthy."],
         ["Walkthrough recording", "A presenter must record the requested project walkthrough."],
         ["GitHub update", "The latest source and report updates are published on the main branch of the repository linked below."],
         ["Search and pagination", "Server-side search and paging are implemented for all workspace lists. Dashboard summaries and global quick search still use role-scoped compatibility arrays capped at 100 rows per resource."],
@@ -401,7 +401,7 @@ story += [
     p("Project repository", "SubsectionMed"),
     p(f'<link href="{repo_url}" color="#087E8B">{repo_url}</link>', "BodyMed"),
     p("Conclusion", "SubsectionMed"),
-    p("MedCore HMS implements the requested NestJS, Prisma, and Next.js architecture. Current checks confirm lint, type checks, production builds, 100 backend unit tests, and 82.37% API line coverage; Safari also confirms the public sign-in view renders. The Render frontend is live, but the API has not passed its health check because it cannot currently connect to Neon, so the hosted site is not yet a working end-to-end demo. Local database-backed verification, Docker validation, automated browser execution, live provider checks, and a presenter-recorded walkthrough remain incomplete.", "BodyMed"),
+    p("MedCore HMS implements the requested NestJS, Prisma, and Next.js architecture. GitHub Actions confirms lint, type checks, production builds, 100 backend unit tests, 82.37% API line coverage, a Playwright sign-in-page smoke test, and Docker Compose service health. The Render frontend is live, but the API health route remains unresponsive, so the hosted site is not yet a working end-to-end demo. Authenticated hosted workflows, provider-backed checks, and a presenter-recorded walkthrough remain incomplete.", "BodyMed"),
 ]
 
 doc.build(story)
