@@ -41,7 +41,7 @@ Install Node.js 22.12+ (22.x) or 24.x, pnpm 11, Docker Desktop, and Docker Compo
 
 The API runs on port 3001 and its OpenAPI documentation is at http://localhost:3001/api/docs. The web application proxies API requests through the same-origin /api route.
 
-The seed creates two demo hospitals, eight doctors, thirty patients, and demo workflow data. Demo users use the DEMO_PASSWORD from .env (the local default is DemoPass123!). Change it before sharing the demo. Seed data is fictional.
+The seed creates two demo hospitals, eight doctors, thirty patients, and demo workflow data. Local demo users use `DEMO_PASSWORD` from `.env` (default `DemoPass123!`). The public Render review demo intentionally uses the same published demo password so reviewers can sign in. Demo records are fictional; never enter real patient data. Set a private password and remove the public demo credential before any production use.
 
 ## Useful checks
 

@@ -7,4 +7,5 @@ test('renders the MedCore sign-in and demo account guidance', async ({ page }) =
   await expect(page.getByLabel('Password')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Sign in' })).toBeVisible();
   await expect(page.getByText('admin@city.example')).toBeVisible();
+  await expect(page.getByText('DemoPass123!', { exact: false })).toBeVisible();
 });

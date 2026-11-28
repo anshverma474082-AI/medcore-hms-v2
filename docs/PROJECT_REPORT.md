@@ -96,7 +96,7 @@ The complete entity relationships are maintained in [er-diagram.mmd](er-diagram.
 
 Use Node.js 22.12+ or 24.x, pnpm 11, and PostgreSQL plus Redis. From the repository root, run `pnpm install`, `pnpm setup:local`, start PostgreSQL and Redis, then run `pnpm db:migrate`, `pnpm db:seed`, and `pnpm dev`. Open the app at `http://localhost:3000`; API documentation is at `http://localhost:3001/api/docs`.
 
-Seeded examples include `admin@city.example`, `doctor1@city.example`, `patient01@city.example`, and `pharmacy@city.example`. These local demo users use the `DEMO_PASSWORD` setting (the local default is `DemoPass123!`). Seeded records are fictional. Change the shared demo password before exposing any public instance; never enter real patient information.
+Seeded examples include `admin@city.example`, `doctor1@city.example`, `patient01@city.example`, and `pharmacy@city.example`. The public Render review demo uses the deliberately shared password `DemoPass123!` so reviewers can sign in. Seeded records are fictional. Never enter real patient information; replace the shared password and hide demo credentials before any production use.
 
 Suggested recording path: sign in as a patient and show appointment booking; switch to a doctor to show the queue, clinical note, prescription, and attachment controls; then demonstrate patient access to approved records and PDF prescriptions, and briefly show lab, pharmacy, invoice, dashboard, and API documentation views. Validate each interactive flow on the current environment before recording; this is a walkthrough suggestion, not a claim that every sequence has been end-to-end tested.
 

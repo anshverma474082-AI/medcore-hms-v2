@@ -14,7 +14,7 @@ services:
     region: oregon
     dockerfilePath: ./Dockerfile.api
     dockerContext: .
-    autoDeployTrigger: off
+    autoDeployTrigger: commit
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV
@@ -58,7 +58,7 @@ services:
       - key: RAZORPAY_WEBHOOK_SECRET
         sync: false
       - key: DEMO_PASSWORD
-        generateValue: true
+        value: "DemoPass123!"
 
   - type: web
     name: medcore-hms-web
@@ -67,7 +67,7 @@ services:
     region: oregon
     dockerfilePath: ./Dockerfile.web
     dockerContext: .
-    autoDeployTrigger: off
+    autoDeployTrigger: commit
     healthCheckPath: /
     envVars:
       - key: API_INTERNAL_URL
