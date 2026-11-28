@@ -4,11 +4,11 @@ MedCore HMS is a multi-hospital management system with a NestJS API, Prisma data
 
 **Repository:** https://github.com/anshverma474082-AI/medcore-hms-v2
 
-**Current state:** the source and release materials are published on the `main` branch. The Render frontend is live; a separate Neon PostgreSQL project has been created, but its connection is not yet configured on the Render API.
+**Current state:** the source and release materials are published on `main`. The Render frontend is live. The Render API has not passed its health check; recent API startup attempts failed to connect to the Neon PostgreSQL endpoint (Prisma `P1001`).
 
 **Frontend URL:** https://medcore-hms-web.onrender.com
 
-**Deployment note:** the sign-in page loads, but sign-in and data-backed workflows are unavailable until the API is deployed with the Neon database connection. The existing AI DJ Render database has not been changed.
+**Deployment note:** the public sign-in page loads, but sign-in and data-backed workflows remain unavailable until the Render API can reach Neon and pass `/health`. The existing AI DJ Render database has not been changed.
 
 ## Features
 
@@ -55,7 +55,7 @@ The seed creates two demo hospitals, eight doctors, thirty patients, and demo wo
 
 ## Deployment and release
 
-The public frontend is deployed at https://medcore-hms-web.onrender.com. The Render Key Value service is available. A separate free Neon PostgreSQL project named `medcore-hms-demo` has been created in Oregon, and the Render blueprint now accepts its connection URL as a secret. The API still needs the Neon URL added in Render and a blueprint sync before sign-in or data-backed workflows can work. The existing AI DJ Render database has not been changed. Do not enter real patient information. Razorpay, Resend, and Twilio remain unconfigured because no provider credentials were supplied. The latest published source is on `main` in the repository linked above.
+The public frontend is deployed at https://medcore-hms-web.onrender.com. The Render Key Value service is available. A separate free Neon PostgreSQL project named `medcore-hms-demo` has been created in Oregon and its URL was configured in Render. The API has not passed its health check; previous startup logs showed Prisma `P1001` while connecting to Neon, and the public `/health` route still does not return a health response. The latest source sets both web services to deploy on commits and aligns the seeded demo password with the sign-in page; verify that Render has synced the blueprint and inspect its latest startup logs. The existing AI DJ Render database has not been changed. Do not enter real patient information. Razorpay, Resend, and Twilio remain unconfigured because no provider credentials were supplied. The latest published source is on `main` in the repository linked above.
 
 ## Project materials
 

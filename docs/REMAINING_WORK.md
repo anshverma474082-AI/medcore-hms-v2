@@ -20,11 +20,11 @@ Dashboard summaries and global quick search still use compatibility list endpoin
 
 | Work | Current state | Required next step |
 |---|---|---|
-| Browser automation | Playwright starts its local server, but headless Chromium exits with a macOS Mach port permission error before the test runs. | Run `pnpm test:e2e` in CI or on a compatible machine. The prior manual desktop browser smoke check passed for sign-in, appointments, paging/search, and billing. |
+| Browser automation | Playwright starts its local server, but headless Chromium exits with a macOS Mach port permission error before the test runs. Safari confirmed the sign-in UI only; backend requests fail because the API/database are unavailable locally. | Run `pnpm test:e2e` in CI or on a compatible machine, then verify authenticated workflows against a running database. |
 | Docker validation | Docker is unavailable in this environment. | Build and start the Compose stack on a machine with Docker; verify health checks and persistence. |
-| Render demo | Frontend is deployed at https://medcore-hms-web.onrender.com and its sign-in page loads. Valkey is available. A separate free Neon PostgreSQL project was created in Oregon. | Add the Neon connection URL as the Render `DATABASE_URL` secret, sync the blueprint, then verify API health, sign-in, and core hosted workflows. The existing AI DJ Render database is untouched. |
+| Render demo | Frontend is deployed at https://medcore-hms-web.onrender.com and its sign-in page loads. Valkey is available. The Neon connection URL is configured, but prior API deploy logs report Prisma `P1001`; the public API health route still shows Render's application-loading page. | Sign in to Render, inspect the latest API deployment logs and database settings, sync the latest blueprint, resolve Neon connectivity, and verify API health, sign-in, and core hosted workflows. The existing AI DJ Render database is untouched. |
 | Provider checks | Resend, Twilio, and Razorpay adapters exist; no provider credentials or live transaction tests were supplied. | Add sandbox credentials and verify only the required provider workflows. |
-| GitHub publication | Repository: https://github.com/anshverma474082-AI/medcore-hms-v2. Current source and report are published on `main`. | Publish any further changes after reviewing them. |
+| GitHub publication | Repository: https://github.com/anshverma474082-AI/medcore-hms-v2. The latest source and report updates are published on `main`. | No source publication remains for this update. |
 | Walkthrough evidence | No presenter-recorded walkthrough has been supplied. | Record the reviewer walkthrough from the local or hosted demo. |
 | ER diagram export | The Mermaid ER source is available at `docs/er-diagram.mmd`; no standalone image export is included. | Export an SVG or PNG if the submission portal requires it. |
 
@@ -37,4 +37,4 @@ Dashboard summaries and global quick search still use compatibility list endpoin
 
 ## Release dependencies
 
-A working public review requires the Neon connection URL to be configured securely in Render and the API to deploy successfully; only the frontend currently loads. Provider-backed checks require sandbox credentials. The presenter must record the walkthrough. These items are not described as complete in the project report.
+A working public review still requires the Render API to connect to Neon and pass `/health`; only the frontend currently loads. Provider-backed checks require sandbox credentials. The presenter must record the walkthrough. These items are not described as complete in the project report.
