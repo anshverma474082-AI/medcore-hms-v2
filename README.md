@@ -31,7 +31,7 @@ All external services need their own credentials. No real payment, email, or SMS
 
 ## Local setup
 
-Install Node.js 22.12+ (22.x) or 24.x, pnpm 11, Docker Desktop, and Docker Compose. From the project root:
+Install Node.js 22.13+ (22.x) or 24.x, pnpm 11, Docker Desktop, and Docker Compose. From the project root:
 
 1. Run **pnpm install**.
 2. Run **pnpm setup:local** to create a private .env file with local secrets.

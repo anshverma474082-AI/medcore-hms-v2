@@ -345,7 +345,7 @@ story += [
 story += [
     p("4. Local demo and reviewer guide", "SectionMed"),
     p("Starting the local demo", "SubsectionMed"),
-    p("Use Node.js 22.12+ or 24.x, pnpm 11, and PostgreSQL plus Redis. Docker Compose can start local database services. From the repository root, follow the README setup sequence:", "BodyMed"),
+    p("Use Node.js 22.13+ or 24.x, pnpm 11, and PostgreSQL plus Redis. Docker Compose can start local database services. From the repository root, follow the README setup sequence:", "BodyMed"),
     *bullets([
         "Run pnpm install and pnpm setup:local to create local environment settings.",
         "Start PostgreSQL and Redis with docker compose up --build -d postgres redis, or use compatible local services.",
