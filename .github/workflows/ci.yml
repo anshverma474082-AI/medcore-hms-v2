@@ -1,0 +1,99 @@
+name: MedCore checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  application:
+    name: Lint, tests, build, and browser smoke test
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://medcore:ci-only@127.0.0.1:5432/medcore?schema=public
+      JWT_ACCESS_SECRET: ci-only-secret-value-that-is-not-used-outside-tests
+      CLINICAL_ENCRYPTION_KEY: MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.25.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.12.0
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Type-check
+        run: pnpm typecheck
+
+      - name: API tests and coverage
+        run: pnpm test:api
+
+      - name: Production build
+        run: pnpm build
+
+      - name: Install Chromium for Playwright
+        run: pnpm --filter @medcore/web exec playwright install --with-deps chromium
+
+      - name: Browser smoke test
+        run: pnpm test:e2e
+
+  docker-smoke:
+    name: Docker Compose smoke test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Create disposable demo configuration
+        run: |
+          python3 - <<'PY'
+          import base64
+          import secrets
+          from pathlib import Path
+
+          secret = secrets.token_urlsafe(48)
+          encryption_key = base64.b64encode(secrets.token_bytes(32)).decode()
+          values = {
+              "NODE_ENV": "production",
+              "PORT": "3001",
+              "DATABASE_URL": "postgresql://medcore:medcore-local-only@postgres:5432/medcore?schema=public",
+              "REDIS_URL": "redis://:medcore-local-only@redis:6379",
+              "JWT_ACCESS_SECRET": secret,
+              "CLINICAL_ENCRYPTION_KEY": encryption_key,
+              "BCRYPT_ROUNDS": "4",
+              "COOKIE_SECURE": "false",
+              "FRONTEND_ORIGINS": "http://localhost:3000",
+              "API_INTERNAL_URL": "http://api:3001",
+              "NEXT_PUBLIC_API_URL": "http://localhost:3001",
+              "DEMO_PASSWORD": "DemoPass123!",
+          }
+          Path(".env").write_text("\n".join(f"{key}={value}" for key, value in values.items()) + "\n")
+          PY
+
+      - name: Build and start Docker Compose stack
+        run: docker compose up --build --detach --wait --wait-timeout 240
+
+      - name: Verify web and API health
+        run: |
+          curl --fail --retry 20 --retry-delay 2 --retry-connrefused http://127.0.0.1:8080/
+          curl --fail --retry 20 --retry-delay 2 --retry-connrefused http://127.0.0.1:3001/health
+
+      - name: Stop disposable stack
+        if: always()
+        run: docker compose down --volumes --remove-orphans
